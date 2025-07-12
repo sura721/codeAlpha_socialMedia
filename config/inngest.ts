@@ -37,6 +37,7 @@ export const syncUserOnCreate = inngest.createFunction(
     const email = event.data?.email_addresses?.[0]?.email_address ?? "";
     const name = event.data?.first_name ?? "";
      const username = event.data?.username ?? "";
+    const avatar = event.data?.image_url ?? "";  
 
      if (!clerkId || !email || !username) {
       throw new Error("Missing clerkId, email, or username in event data");
@@ -51,6 +52,7 @@ export const syncUserOnCreate = inngest.createFunction(
           email,
           name,
           username, 
+          avatar
         },
       });
     });
