@@ -24,6 +24,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  */
 export type Post = $Result.DefaultSelection<Prisma.$PostPayload>
 /**
+ * Model Hashtag
+ * 
+ */
+export type Hashtag = $Result.DefaultSelection<Prisma.$HashtagPayload>
+/**
  * Model Comment
  * 
  */
@@ -206,6 +211,16 @@ export class PrismaClient<
     * ```
     */
   get post(): Prisma.PostDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.hashtag`: Exposes CRUD operations for the **Hashtag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Hashtags
+    * const hashtags = await prisma.hashtag.findMany()
+    * ```
+    */
+  get hashtag(): Prisma.HashtagDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.comment`: Exposes CRUD operations for the **Comment** model.
@@ -688,6 +703,7 @@ export namespace Prisma {
   export const ModelName: {
     User: 'User',
     Post: 'Post',
+    Hashtag: 'Hashtag',
     Comment: 'Comment',
     Like: 'Like',
     Follows: 'Follows',
@@ -710,7 +726,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "post" | "comment" | "like" | "follows" | "notification"
+      modelProps: "user" | "post" | "hashtag" | "comment" | "like" | "follows" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -859,6 +875,80 @@ export namespace Prisma {
           count: {
             args: Prisma.PostCountArgs<ExtArgs>
             result: $Utils.Optional<PostCountAggregateOutputType> | number
+          }
+        }
+      }
+      Hashtag: {
+        payload: Prisma.$HashtagPayload<ExtArgs>
+        fields: Prisma.HashtagFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.HashtagFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HashtagPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.HashtagFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HashtagPayload>
+          }
+          findFirst: {
+            args: Prisma.HashtagFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HashtagPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.HashtagFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HashtagPayload>
+          }
+          findMany: {
+            args: Prisma.HashtagFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HashtagPayload>[]
+          }
+          create: {
+            args: Prisma.HashtagCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HashtagPayload>
+          }
+          createMany: {
+            args: Prisma.HashtagCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.HashtagCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HashtagPayload>[]
+          }
+          delete: {
+            args: Prisma.HashtagDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HashtagPayload>
+          }
+          update: {
+            args: Prisma.HashtagUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HashtagPayload>
+          }
+          deleteMany: {
+            args: Prisma.HashtagDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.HashtagUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.HashtagUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HashtagPayload>[]
+          }
+          upsert: {
+            args: Prisma.HashtagUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$HashtagPayload>
+          }
+          aggregate: {
+            args: Prisma.HashtagAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateHashtag>
+          }
+          groupBy: {
+            args: Prisma.HashtagGroupByArgs<ExtArgs>
+            result: $Utils.Optional<HashtagGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.HashtagCountArgs<ExtArgs>
+            result: $Utils.Optional<HashtagCountAggregateOutputType> | number
           }
         }
       }
@@ -1244,6 +1334,7 @@ export namespace Prisma {
   export type GlobalOmitConfig = {
     user?: UserOmit
     post?: PostOmit
+    hashtag?: HashtagOmit
     comment?: CommentOmit
     like?: LikeOmit
     follows?: FollowsOmit
@@ -1430,12 +1521,14 @@ export namespace Prisma {
     comments: number
     likes: number
     notifications: number
+    hashtags: number
   }
 
   export type PostCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     comments?: boolean | PostCountOutputTypeCountCommentsArgs
     likes?: boolean | PostCountOutputTypeCountLikesArgs
     notifications?: boolean | PostCountOutputTypeCountNotificationsArgs
+    hashtags?: boolean | PostCountOutputTypeCountHashtagsArgs
   }
 
   // Custom InputTypes
@@ -1468,6 +1561,44 @@ export namespace Prisma {
    */
   export type PostCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
+  }
+
+  /**
+   * PostCountOutputType without action
+   */
+  export type PostCountOutputTypeCountHashtagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HashtagWhereInput
+  }
+
+
+  /**
+   * Count Type HashtagCountOutputType
+   */
+
+  export type HashtagCountOutputType = {
+    posts: number
+  }
+
+  export type HashtagCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posts?: boolean | HashtagCountOutputTypeCountPostsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * HashtagCountOutputType without action
+   */
+  export type HashtagCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HashtagCountOutputType
+     */
+    select?: HashtagCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * HashtagCountOutputType without action
+   */
+  export type HashtagCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
   }
 
 
@@ -2998,6 +3129,7 @@ export namespace Prisma {
     comments?: boolean | Post$commentsArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
     notifications?: boolean | Post$notificationsArgs<ExtArgs>
+    hashtags?: boolean | Post$hashtagsArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
@@ -3036,6 +3168,7 @@ export namespace Prisma {
     comments?: boolean | Post$commentsArgs<ExtArgs>
     likes?: boolean | Post$likesArgs<ExtArgs>
     notifications?: boolean | Post$notificationsArgs<ExtArgs>
+    hashtags?: boolean | Post$hashtagsArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PostIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3052,6 +3185,7 @@ export namespace Prisma {
       comments: Prisma.$CommentPayload<ExtArgs>[]
       likes: Prisma.$LikePayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
+      hashtags: Prisma.$HashtagPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3458,6 +3592,7 @@ export namespace Prisma {
     comments<T extends Post$commentsArgs<ExtArgs> = {}>(args?: Subset<T, Post$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     likes<T extends Post$likesArgs<ExtArgs> = {}>(args?: Subset<T, Post$likesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends Post$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, Post$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    hashtags<T extends Post$hashtagsArgs<ExtArgs> = {}>(args?: Subset<T, Post$hashtagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3961,6 +4096,30 @@ export namespace Prisma {
   }
 
   /**
+   * Post.hashtags
+   */
+  export type Post$hashtagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HashtagInclude<ExtArgs> | null
+    where?: HashtagWhereInput
+    orderBy?: HashtagOrderByWithRelationInput | HashtagOrderByWithRelationInput[]
+    cursor?: HashtagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: HashtagScalarFieldEnum | HashtagScalarFieldEnum[]
+  }
+
+  /**
    * Post without action
    */
   export type PostDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3976,6 +4135,1037 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PostInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Hashtag
+   */
+
+  export type AggregateHashtag = {
+    _count: HashtagCountAggregateOutputType | null
+    _min: HashtagMinAggregateOutputType | null
+    _max: HashtagMaxAggregateOutputType | null
+  }
+
+  export type HashtagMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+  }
+
+  export type HashtagMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+  }
+
+  export type HashtagCountAggregateOutputType = {
+    id: number
+    name: number
+    _all: number
+  }
+
+
+  export type HashtagMinAggregateInputType = {
+    id?: true
+    name?: true
+  }
+
+  export type HashtagMaxAggregateInputType = {
+    id?: true
+    name?: true
+  }
+
+  export type HashtagCountAggregateInputType = {
+    id?: true
+    name?: true
+    _all?: true
+  }
+
+  export type HashtagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Hashtag to aggregate.
+     */
+    where?: HashtagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Hashtags to fetch.
+     */
+    orderBy?: HashtagOrderByWithRelationInput | HashtagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: HashtagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Hashtags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Hashtags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Hashtags
+    **/
+    _count?: true | HashtagCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: HashtagMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: HashtagMaxAggregateInputType
+  }
+
+  export type GetHashtagAggregateType<T extends HashtagAggregateArgs> = {
+        [P in keyof T & keyof AggregateHashtag]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateHashtag[P]>
+      : GetScalarType<T[P], AggregateHashtag[P]>
+  }
+
+
+
+
+  export type HashtagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: HashtagWhereInput
+    orderBy?: HashtagOrderByWithAggregationInput | HashtagOrderByWithAggregationInput[]
+    by: HashtagScalarFieldEnum[] | HashtagScalarFieldEnum
+    having?: HashtagScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: HashtagCountAggregateInputType | true
+    _min?: HashtagMinAggregateInputType
+    _max?: HashtagMaxAggregateInputType
+  }
+
+  export type HashtagGroupByOutputType = {
+    id: string
+    name: string
+    _count: HashtagCountAggregateOutputType | null
+    _min: HashtagMinAggregateOutputType | null
+    _max: HashtagMaxAggregateOutputType | null
+  }
+
+  type GetHashtagGroupByPayload<T extends HashtagGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<HashtagGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof HashtagGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], HashtagGroupByOutputType[P]>
+            : GetScalarType<T[P], HashtagGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type HashtagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    posts?: boolean | Hashtag$postsArgs<ExtArgs>
+    _count?: boolean | HashtagCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["hashtag"]>
+
+  export type HashtagSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["hashtag"]>
+
+  export type HashtagSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+  }, ExtArgs["result"]["hashtag"]>
+
+  export type HashtagSelectScalar = {
+    id?: boolean
+    name?: boolean
+  }
+
+  export type HashtagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name", ExtArgs["result"]["hashtag"]>
+  export type HashtagInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posts?: boolean | Hashtag$postsArgs<ExtArgs>
+    _count?: boolean | HashtagCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type HashtagIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type HashtagIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $HashtagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Hashtag"
+    objects: {
+      posts: Prisma.$PostPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+    }, ExtArgs["result"]["hashtag"]>
+    composites: {}
+  }
+
+  type HashtagGetPayload<S extends boolean | null | undefined | HashtagDefaultArgs> = $Result.GetResult<Prisma.$HashtagPayload, S>
+
+  type HashtagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<HashtagFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: HashtagCountAggregateInputType | true
+    }
+
+  export interface HashtagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Hashtag'], meta: { name: 'Hashtag' } }
+    /**
+     * Find zero or one Hashtag that matches the filter.
+     * @param {HashtagFindUniqueArgs} args - Arguments to find a Hashtag
+     * @example
+     * // Get one Hashtag
+     * const hashtag = await prisma.hashtag.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends HashtagFindUniqueArgs>(args: SelectSubset<T, HashtagFindUniqueArgs<ExtArgs>>): Prisma__HashtagClient<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Hashtag that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {HashtagFindUniqueOrThrowArgs} args - Arguments to find a Hashtag
+     * @example
+     * // Get one Hashtag
+     * const hashtag = await prisma.hashtag.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends HashtagFindUniqueOrThrowArgs>(args: SelectSubset<T, HashtagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__HashtagClient<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Hashtag that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HashtagFindFirstArgs} args - Arguments to find a Hashtag
+     * @example
+     * // Get one Hashtag
+     * const hashtag = await prisma.hashtag.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends HashtagFindFirstArgs>(args?: SelectSubset<T, HashtagFindFirstArgs<ExtArgs>>): Prisma__HashtagClient<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Hashtag that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HashtagFindFirstOrThrowArgs} args - Arguments to find a Hashtag
+     * @example
+     * // Get one Hashtag
+     * const hashtag = await prisma.hashtag.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends HashtagFindFirstOrThrowArgs>(args?: SelectSubset<T, HashtagFindFirstOrThrowArgs<ExtArgs>>): Prisma__HashtagClient<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Hashtags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HashtagFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Hashtags
+     * const hashtags = await prisma.hashtag.findMany()
+     * 
+     * // Get first 10 Hashtags
+     * const hashtags = await prisma.hashtag.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const hashtagWithIdOnly = await prisma.hashtag.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends HashtagFindManyArgs>(args?: SelectSubset<T, HashtagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Hashtag.
+     * @param {HashtagCreateArgs} args - Arguments to create a Hashtag.
+     * @example
+     * // Create one Hashtag
+     * const Hashtag = await prisma.hashtag.create({
+     *   data: {
+     *     // ... data to create a Hashtag
+     *   }
+     * })
+     * 
+     */
+    create<T extends HashtagCreateArgs>(args: SelectSubset<T, HashtagCreateArgs<ExtArgs>>): Prisma__HashtagClient<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Hashtags.
+     * @param {HashtagCreateManyArgs} args - Arguments to create many Hashtags.
+     * @example
+     * // Create many Hashtags
+     * const hashtag = await prisma.hashtag.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends HashtagCreateManyArgs>(args?: SelectSubset<T, HashtagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Hashtags and returns the data saved in the database.
+     * @param {HashtagCreateManyAndReturnArgs} args - Arguments to create many Hashtags.
+     * @example
+     * // Create many Hashtags
+     * const hashtag = await prisma.hashtag.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Hashtags and only return the `id`
+     * const hashtagWithIdOnly = await prisma.hashtag.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends HashtagCreateManyAndReturnArgs>(args?: SelectSubset<T, HashtagCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Hashtag.
+     * @param {HashtagDeleteArgs} args - Arguments to delete one Hashtag.
+     * @example
+     * // Delete one Hashtag
+     * const Hashtag = await prisma.hashtag.delete({
+     *   where: {
+     *     // ... filter to delete one Hashtag
+     *   }
+     * })
+     * 
+     */
+    delete<T extends HashtagDeleteArgs>(args: SelectSubset<T, HashtagDeleteArgs<ExtArgs>>): Prisma__HashtagClient<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Hashtag.
+     * @param {HashtagUpdateArgs} args - Arguments to update one Hashtag.
+     * @example
+     * // Update one Hashtag
+     * const hashtag = await prisma.hashtag.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends HashtagUpdateArgs>(args: SelectSubset<T, HashtagUpdateArgs<ExtArgs>>): Prisma__HashtagClient<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Hashtags.
+     * @param {HashtagDeleteManyArgs} args - Arguments to filter Hashtags to delete.
+     * @example
+     * // Delete a few Hashtags
+     * const { count } = await prisma.hashtag.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends HashtagDeleteManyArgs>(args?: SelectSubset<T, HashtagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Hashtags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HashtagUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Hashtags
+     * const hashtag = await prisma.hashtag.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends HashtagUpdateManyArgs>(args: SelectSubset<T, HashtagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Hashtags and returns the data updated in the database.
+     * @param {HashtagUpdateManyAndReturnArgs} args - Arguments to update many Hashtags.
+     * @example
+     * // Update many Hashtags
+     * const hashtag = await prisma.hashtag.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Hashtags and only return the `id`
+     * const hashtagWithIdOnly = await prisma.hashtag.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends HashtagUpdateManyAndReturnArgs>(args: SelectSubset<T, HashtagUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Hashtag.
+     * @param {HashtagUpsertArgs} args - Arguments to update or create a Hashtag.
+     * @example
+     * // Update or create a Hashtag
+     * const hashtag = await prisma.hashtag.upsert({
+     *   create: {
+     *     // ... data to create a Hashtag
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Hashtag we want to update
+     *   }
+     * })
+     */
+    upsert<T extends HashtagUpsertArgs>(args: SelectSubset<T, HashtagUpsertArgs<ExtArgs>>): Prisma__HashtagClient<$Result.GetResult<Prisma.$HashtagPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Hashtags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HashtagCountArgs} args - Arguments to filter Hashtags to count.
+     * @example
+     * // Count the number of Hashtags
+     * const count = await prisma.hashtag.count({
+     *   where: {
+     *     // ... the filter for the Hashtags we want to count
+     *   }
+     * })
+    **/
+    count<T extends HashtagCountArgs>(
+      args?: Subset<T, HashtagCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], HashtagCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Hashtag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HashtagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends HashtagAggregateArgs>(args: Subset<T, HashtagAggregateArgs>): Prisma.PrismaPromise<GetHashtagAggregateType<T>>
+
+    /**
+     * Group by Hashtag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {HashtagGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends HashtagGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: HashtagGroupByArgs['orderBy'] }
+        : { orderBy?: HashtagGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, HashtagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetHashtagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Hashtag model
+   */
+  readonly fields: HashtagFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Hashtag.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__HashtagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    posts<T extends Hashtag$postsArgs<ExtArgs> = {}>(args?: Subset<T, Hashtag$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Hashtag model
+   */
+  interface HashtagFieldRefs {
+    readonly id: FieldRef<"Hashtag", 'String'>
+    readonly name: FieldRef<"Hashtag", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Hashtag findUnique
+   */
+  export type HashtagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HashtagInclude<ExtArgs> | null
+    /**
+     * Filter, which Hashtag to fetch.
+     */
+    where: HashtagWhereUniqueInput
+  }
+
+  /**
+   * Hashtag findUniqueOrThrow
+   */
+  export type HashtagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HashtagInclude<ExtArgs> | null
+    /**
+     * Filter, which Hashtag to fetch.
+     */
+    where: HashtagWhereUniqueInput
+  }
+
+  /**
+   * Hashtag findFirst
+   */
+  export type HashtagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HashtagInclude<ExtArgs> | null
+    /**
+     * Filter, which Hashtag to fetch.
+     */
+    where?: HashtagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Hashtags to fetch.
+     */
+    orderBy?: HashtagOrderByWithRelationInput | HashtagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Hashtags.
+     */
+    cursor?: HashtagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Hashtags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Hashtags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Hashtags.
+     */
+    distinct?: HashtagScalarFieldEnum | HashtagScalarFieldEnum[]
+  }
+
+  /**
+   * Hashtag findFirstOrThrow
+   */
+  export type HashtagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HashtagInclude<ExtArgs> | null
+    /**
+     * Filter, which Hashtag to fetch.
+     */
+    where?: HashtagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Hashtags to fetch.
+     */
+    orderBy?: HashtagOrderByWithRelationInput | HashtagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Hashtags.
+     */
+    cursor?: HashtagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Hashtags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Hashtags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Hashtags.
+     */
+    distinct?: HashtagScalarFieldEnum | HashtagScalarFieldEnum[]
+  }
+
+  /**
+   * Hashtag findMany
+   */
+  export type HashtagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HashtagInclude<ExtArgs> | null
+    /**
+     * Filter, which Hashtags to fetch.
+     */
+    where?: HashtagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Hashtags to fetch.
+     */
+    orderBy?: HashtagOrderByWithRelationInput | HashtagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Hashtags.
+     */
+    cursor?: HashtagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Hashtags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Hashtags.
+     */
+    skip?: number
+    distinct?: HashtagScalarFieldEnum | HashtagScalarFieldEnum[]
+  }
+
+  /**
+   * Hashtag create
+   */
+  export type HashtagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HashtagInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Hashtag.
+     */
+    data: XOR<HashtagCreateInput, HashtagUncheckedCreateInput>
+  }
+
+  /**
+   * Hashtag createMany
+   */
+  export type HashtagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Hashtags.
+     */
+    data: HashtagCreateManyInput | HashtagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Hashtag createManyAndReturn
+   */
+  export type HashtagCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * The data used to create many Hashtags.
+     */
+    data: HashtagCreateManyInput | HashtagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Hashtag update
+   */
+  export type HashtagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HashtagInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Hashtag.
+     */
+    data: XOR<HashtagUpdateInput, HashtagUncheckedUpdateInput>
+    /**
+     * Choose, which Hashtag to update.
+     */
+    where: HashtagWhereUniqueInput
+  }
+
+  /**
+   * Hashtag updateMany
+   */
+  export type HashtagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Hashtags.
+     */
+    data: XOR<HashtagUpdateManyMutationInput, HashtagUncheckedUpdateManyInput>
+    /**
+     * Filter which Hashtags to update
+     */
+    where?: HashtagWhereInput
+    /**
+     * Limit how many Hashtags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Hashtag updateManyAndReturn
+   */
+  export type HashtagUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * The data used to update Hashtags.
+     */
+    data: XOR<HashtagUpdateManyMutationInput, HashtagUncheckedUpdateManyInput>
+    /**
+     * Filter which Hashtags to update
+     */
+    where?: HashtagWhereInput
+    /**
+     * Limit how many Hashtags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Hashtag upsert
+   */
+  export type HashtagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HashtagInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Hashtag to update in case it exists.
+     */
+    where: HashtagWhereUniqueInput
+    /**
+     * In case the Hashtag found by the `where` argument doesn't exist, create a new Hashtag with this data.
+     */
+    create: XOR<HashtagCreateInput, HashtagUncheckedCreateInput>
+    /**
+     * In case the Hashtag was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<HashtagUpdateInput, HashtagUncheckedUpdateInput>
+  }
+
+  /**
+   * Hashtag delete
+   */
+  export type HashtagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HashtagInclude<ExtArgs> | null
+    /**
+     * Filter which Hashtag to delete.
+     */
+    where: HashtagWhereUniqueInput
+  }
+
+  /**
+   * Hashtag deleteMany
+   */
+  export type HashtagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Hashtags to delete
+     */
+    where?: HashtagWhereInput
+    /**
+     * Limit how many Hashtags to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Hashtag.posts
+   */
+  export type Hashtag$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Post
+     */
+    omit?: PostOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PostInclude<ExtArgs> | null
+    where?: PostWhereInput
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    cursor?: PostWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+  }
+
+  /**
+   * Hashtag without action
+   */
+  export type HashtagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Hashtag
+     */
+    select?: HashtagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Hashtag
+     */
+    omit?: HashtagOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HashtagInclude<ExtArgs> | null
   }
 
 
@@ -8370,6 +9560,14 @@ export namespace Prisma {
   export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
 
 
+  export const HashtagScalarFieldEnum: {
+    id: 'id',
+    name: 'name'
+  };
+
+  export type HashtagScalarFieldEnum = (typeof HashtagScalarFieldEnum)[keyof typeof HashtagScalarFieldEnum]
+
+
   export const CommentScalarFieldEnum: {
     id: 'id',
     content: 'content',
@@ -8626,6 +9824,7 @@ export namespace Prisma {
     comments?: CommentListRelationFilter
     likes?: LikeListRelationFilter
     notifications?: NotificationListRelationFilter
+    hashtags?: HashtagListRelationFilter
   }
 
   export type PostOrderByWithRelationInput = {
@@ -8639,6 +9838,7 @@ export namespace Prisma {
     comments?: CommentOrderByRelationAggregateInput
     likes?: LikeOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
+    hashtags?: HashtagOrderByRelationAggregateInput
   }
 
   export type PostWhereUniqueInput = Prisma.AtLeast<{
@@ -8655,6 +9855,7 @@ export namespace Prisma {
     comments?: CommentListRelationFilter
     likes?: LikeListRelationFilter
     notifications?: NotificationListRelationFilter
+    hashtags?: HashtagListRelationFilter
   }, "id">
 
   export type PostOrderByWithAggregationInput = {
@@ -8679,6 +9880,46 @@ export namespace Prisma {
     image?: StringNullableWithAggregatesFilter<"Post"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
+  }
+
+  export type HashtagWhereInput = {
+    AND?: HashtagWhereInput | HashtagWhereInput[]
+    OR?: HashtagWhereInput[]
+    NOT?: HashtagWhereInput | HashtagWhereInput[]
+    id?: StringFilter<"Hashtag"> | string
+    name?: StringFilter<"Hashtag"> | string
+    posts?: PostListRelationFilter
+  }
+
+  export type HashtagOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    posts?: PostOrderByRelationAggregateInput
+  }
+
+  export type HashtagWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    name?: string
+    AND?: HashtagWhereInput | HashtagWhereInput[]
+    OR?: HashtagWhereInput[]
+    NOT?: HashtagWhereInput | HashtagWhereInput[]
+    posts?: PostListRelationFilter
+  }, "id" | "name">
+
+  export type HashtagOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    _count?: HashtagCountOrderByAggregateInput
+    _max?: HashtagMaxOrderByAggregateInput
+    _min?: HashtagMinOrderByAggregateInput
+  }
+
+  export type HashtagScalarWhereWithAggregatesInput = {
+    AND?: HashtagScalarWhereWithAggregatesInput | HashtagScalarWhereWithAggregatesInput[]
+    OR?: HashtagScalarWhereWithAggregatesInput[]
+    NOT?: HashtagScalarWhereWithAggregatesInput | HashtagScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Hashtag"> | string
+    name?: StringWithAggregatesFilter<"Hashtag"> | string
   }
 
   export type CommentWhereInput = {
@@ -9060,6 +10301,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutPostInput
     likes?: LikeCreateNestedManyWithoutPostInput
     notifications?: NotificationCreateNestedManyWithoutPostInput
+    hashtags?: HashtagCreateNestedManyWithoutPostsInput
   }
 
   export type PostUncheckedCreateInput = {
@@ -9072,6 +10314,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutPostInput
+    hashtags?: HashtagUncheckedCreateNestedManyWithoutPostsInput
   }
 
   export type PostUpdateInput = {
@@ -9084,6 +10327,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutPostNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     notifications?: NotificationUpdateManyWithoutPostNestedInput
+    hashtags?: HashtagUpdateManyWithoutPostsNestedInput
   }
 
   export type PostUncheckedUpdateInput = {
@@ -9096,6 +10340,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutPostNestedInput
+    hashtags?: HashtagUncheckedUpdateManyWithoutPostsNestedInput
   }
 
   export type PostCreateManyInput = {
@@ -9122,6 +10367,45 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HashtagCreateInput = {
+    id?: string
+    name: string
+    posts?: PostCreateNestedManyWithoutHashtagsInput
+  }
+
+  export type HashtagUncheckedCreateInput = {
+    id?: string
+    name: string
+    posts?: PostUncheckedCreateNestedManyWithoutHashtagsInput
+  }
+
+  export type HashtagUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    posts?: PostUpdateManyWithoutHashtagsNestedInput
+  }
+
+  export type HashtagUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    posts?: PostUncheckedUpdateManyWithoutHashtagsNestedInput
+  }
+
+  export type HashtagCreateManyInput = {
+    id?: string
+    name: string
+  }
+
+  export type HashtagUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HashtagUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
   }
 
   export type CommentCreateInput = {
@@ -9535,6 +10819,16 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
+  export type HashtagListRelationFilter = {
+    every?: HashtagWhereInput
+    some?: HashtagWhereInput
+    none?: HashtagWhereInput
+  }
+
+  export type HashtagOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type PostCountOrderByAggregateInput = {
     id?: SortOrder
     authorId?: SortOrder
@@ -9560,6 +10854,21 @@ export namespace Prisma {
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type HashtagCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type HashtagMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+  }
+
+  export type HashtagMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
   }
 
   export type PostScalarRelationFilter = {
@@ -10046,6 +11355,12 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type HashtagCreateNestedManyWithoutPostsInput = {
+    create?: XOR<HashtagCreateWithoutPostsInput, HashtagUncheckedCreateWithoutPostsInput> | HashtagCreateWithoutPostsInput[] | HashtagUncheckedCreateWithoutPostsInput[]
+    connectOrCreate?: HashtagCreateOrConnectWithoutPostsInput | HashtagCreateOrConnectWithoutPostsInput[]
+    connect?: HashtagWhereUniqueInput | HashtagWhereUniqueInput[]
+  }
+
   export type CommentUncheckedCreateNestedManyWithoutPostInput = {
     create?: XOR<CommentCreateWithoutPostInput, CommentUncheckedCreateWithoutPostInput> | CommentCreateWithoutPostInput[] | CommentUncheckedCreateWithoutPostInput[]
     connectOrCreate?: CommentCreateOrConnectWithoutPostInput | CommentCreateOrConnectWithoutPostInput[]
@@ -10065,6 +11380,12 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutPostInput | NotificationCreateOrConnectWithoutPostInput[]
     createMany?: NotificationCreateManyPostInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type HashtagUncheckedCreateNestedManyWithoutPostsInput = {
+    create?: XOR<HashtagCreateWithoutPostsInput, HashtagUncheckedCreateWithoutPostsInput> | HashtagCreateWithoutPostsInput[] | HashtagUncheckedCreateWithoutPostsInput[]
+    connectOrCreate?: HashtagCreateOrConnectWithoutPostsInput | HashtagCreateOrConnectWithoutPostsInput[]
+    connect?: HashtagWhereUniqueInput | HashtagWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutPostsNestedInput = {
@@ -10117,6 +11438,19 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type HashtagUpdateManyWithoutPostsNestedInput = {
+    create?: XOR<HashtagCreateWithoutPostsInput, HashtagUncheckedCreateWithoutPostsInput> | HashtagCreateWithoutPostsInput[] | HashtagUncheckedCreateWithoutPostsInput[]
+    connectOrCreate?: HashtagCreateOrConnectWithoutPostsInput | HashtagCreateOrConnectWithoutPostsInput[]
+    upsert?: HashtagUpsertWithWhereUniqueWithoutPostsInput | HashtagUpsertWithWhereUniqueWithoutPostsInput[]
+    set?: HashtagWhereUniqueInput | HashtagWhereUniqueInput[]
+    disconnect?: HashtagWhereUniqueInput | HashtagWhereUniqueInput[]
+    delete?: HashtagWhereUniqueInput | HashtagWhereUniqueInput[]
+    connect?: HashtagWhereUniqueInput | HashtagWhereUniqueInput[]
+    update?: HashtagUpdateWithWhereUniqueWithoutPostsInput | HashtagUpdateWithWhereUniqueWithoutPostsInput[]
+    updateMany?: HashtagUpdateManyWithWhereWithoutPostsInput | HashtagUpdateManyWithWhereWithoutPostsInput[]
+    deleteMany?: HashtagScalarWhereInput | HashtagScalarWhereInput[]
+  }
+
   export type CommentUncheckedUpdateManyWithoutPostNestedInput = {
     create?: XOR<CommentCreateWithoutPostInput, CommentUncheckedCreateWithoutPostInput> | CommentCreateWithoutPostInput[] | CommentUncheckedCreateWithoutPostInput[]
     connectOrCreate?: CommentCreateOrConnectWithoutPostInput | CommentCreateOrConnectWithoutPostInput[]
@@ -10157,6 +11491,57 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutPostInput | NotificationUpdateWithWhereUniqueWithoutPostInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutPostInput | NotificationUpdateManyWithWhereWithoutPostInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type HashtagUncheckedUpdateManyWithoutPostsNestedInput = {
+    create?: XOR<HashtagCreateWithoutPostsInput, HashtagUncheckedCreateWithoutPostsInput> | HashtagCreateWithoutPostsInput[] | HashtagUncheckedCreateWithoutPostsInput[]
+    connectOrCreate?: HashtagCreateOrConnectWithoutPostsInput | HashtagCreateOrConnectWithoutPostsInput[]
+    upsert?: HashtagUpsertWithWhereUniqueWithoutPostsInput | HashtagUpsertWithWhereUniqueWithoutPostsInput[]
+    set?: HashtagWhereUniqueInput | HashtagWhereUniqueInput[]
+    disconnect?: HashtagWhereUniqueInput | HashtagWhereUniqueInput[]
+    delete?: HashtagWhereUniqueInput | HashtagWhereUniqueInput[]
+    connect?: HashtagWhereUniqueInput | HashtagWhereUniqueInput[]
+    update?: HashtagUpdateWithWhereUniqueWithoutPostsInput | HashtagUpdateWithWhereUniqueWithoutPostsInput[]
+    updateMany?: HashtagUpdateManyWithWhereWithoutPostsInput | HashtagUpdateManyWithWhereWithoutPostsInput[]
+    deleteMany?: HashtagScalarWhereInput | HashtagScalarWhereInput[]
+  }
+
+  export type PostCreateNestedManyWithoutHashtagsInput = {
+    create?: XOR<PostCreateWithoutHashtagsInput, PostUncheckedCreateWithoutHashtagsInput> | PostCreateWithoutHashtagsInput[] | PostUncheckedCreateWithoutHashtagsInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutHashtagsInput | PostCreateOrConnectWithoutHashtagsInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type PostUncheckedCreateNestedManyWithoutHashtagsInput = {
+    create?: XOR<PostCreateWithoutHashtagsInput, PostUncheckedCreateWithoutHashtagsInput> | PostCreateWithoutHashtagsInput[] | PostUncheckedCreateWithoutHashtagsInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutHashtagsInput | PostCreateOrConnectWithoutHashtagsInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type PostUpdateManyWithoutHashtagsNestedInput = {
+    create?: XOR<PostCreateWithoutHashtagsInput, PostUncheckedCreateWithoutHashtagsInput> | PostCreateWithoutHashtagsInput[] | PostUncheckedCreateWithoutHashtagsInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutHashtagsInput | PostCreateOrConnectWithoutHashtagsInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutHashtagsInput | PostUpsertWithWhereUniqueWithoutHashtagsInput[]
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutHashtagsInput | PostUpdateWithWhereUniqueWithoutHashtagsInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutHashtagsInput | PostUpdateManyWithWhereWithoutHashtagsInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type PostUncheckedUpdateManyWithoutHashtagsNestedInput = {
+    create?: XOR<PostCreateWithoutHashtagsInput, PostUncheckedCreateWithoutHashtagsInput> | PostCreateWithoutHashtagsInput[] | PostUncheckedCreateWithoutHashtagsInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutHashtagsInput | PostCreateOrConnectWithoutHashtagsInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutHashtagsInput | PostUpsertWithWhereUniqueWithoutHashtagsInput[]
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutHashtagsInput | PostUpdateWithWhereUniqueWithoutHashtagsInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutHashtagsInput | PostUpdateManyWithWhereWithoutHashtagsInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutCommentsInput = {
@@ -10501,6 +11886,7 @@ export namespace Prisma {
     comments?: CommentCreateNestedManyWithoutPostInput
     likes?: LikeCreateNestedManyWithoutPostInput
     notifications?: NotificationCreateNestedManyWithoutPostInput
+    hashtags?: HashtagCreateNestedManyWithoutPostsInput
   }
 
   export type PostUncheckedCreateWithoutAuthorInput = {
@@ -10512,6 +11898,7 @@ export namespace Prisma {
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutPostInput
+    hashtags?: HashtagUncheckedCreateNestedManyWithoutPostsInput
   }
 
   export type PostCreateOrConnectWithoutAuthorInput = {
@@ -10963,6 +12350,21 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type HashtagCreateWithoutPostsInput = {
+    id?: string
+    name: string
+  }
+
+  export type HashtagUncheckedCreateWithoutPostsInput = {
+    id?: string
+    name: string
+  }
+
+  export type HashtagCreateOrConnectWithoutPostsInput = {
+    where: HashtagWhereUniqueInput
+    create: XOR<HashtagCreateWithoutPostsInput, HashtagUncheckedCreateWithoutPostsInput>
+  }
+
   export type UserUpsertWithoutPostsInput = {
     update: XOR<UserUpdateWithoutPostsInput, UserUncheckedUpdateWithoutPostsInput>
     create: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
@@ -11062,6 +12464,75 @@ export namespace Prisma {
     data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutPostInput>
   }
 
+  export type HashtagUpsertWithWhereUniqueWithoutPostsInput = {
+    where: HashtagWhereUniqueInput
+    update: XOR<HashtagUpdateWithoutPostsInput, HashtagUncheckedUpdateWithoutPostsInput>
+    create: XOR<HashtagCreateWithoutPostsInput, HashtagUncheckedCreateWithoutPostsInput>
+  }
+
+  export type HashtagUpdateWithWhereUniqueWithoutPostsInput = {
+    where: HashtagWhereUniqueInput
+    data: XOR<HashtagUpdateWithoutPostsInput, HashtagUncheckedUpdateWithoutPostsInput>
+  }
+
+  export type HashtagUpdateManyWithWhereWithoutPostsInput = {
+    where: HashtagScalarWhereInput
+    data: XOR<HashtagUpdateManyMutationInput, HashtagUncheckedUpdateManyWithoutPostsInput>
+  }
+
+  export type HashtagScalarWhereInput = {
+    AND?: HashtagScalarWhereInput | HashtagScalarWhereInput[]
+    OR?: HashtagScalarWhereInput[]
+    NOT?: HashtagScalarWhereInput | HashtagScalarWhereInput[]
+    id?: StringFilter<"Hashtag"> | string
+    name?: StringFilter<"Hashtag"> | string
+  }
+
+  export type PostCreateWithoutHashtagsInput = {
+    id?: string
+    content?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutPostsInput
+    comments?: CommentCreateNestedManyWithoutPostInput
+    likes?: LikeCreateNestedManyWithoutPostInput
+    notifications?: NotificationCreateNestedManyWithoutPostInput
+  }
+
+  export type PostUncheckedCreateWithoutHashtagsInput = {
+    id?: string
+    authorId: string
+    content?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    comments?: CommentUncheckedCreateNestedManyWithoutPostInput
+    likes?: LikeUncheckedCreateNestedManyWithoutPostInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutPostInput
+  }
+
+  export type PostCreateOrConnectWithoutHashtagsInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutHashtagsInput, PostUncheckedCreateWithoutHashtagsInput>
+  }
+
+  export type PostUpsertWithWhereUniqueWithoutHashtagsInput = {
+    where: PostWhereUniqueInput
+    update: XOR<PostUpdateWithoutHashtagsInput, PostUncheckedUpdateWithoutHashtagsInput>
+    create: XOR<PostCreateWithoutHashtagsInput, PostUncheckedCreateWithoutHashtagsInput>
+  }
+
+  export type PostUpdateWithWhereUniqueWithoutHashtagsInput = {
+    where: PostWhereUniqueInput
+    data: XOR<PostUpdateWithoutHashtagsInput, PostUncheckedUpdateWithoutHashtagsInput>
+  }
+
+  export type PostUpdateManyWithWhereWithoutHashtagsInput = {
+    where: PostScalarWhereInput
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutHashtagsInput>
+  }
+
   export type UserCreateWithoutCommentsInput = {
     id?: string
     email: string
@@ -11116,6 +12587,7 @@ export namespace Prisma {
     author: UserCreateNestedOneWithoutPostsInput
     likes?: LikeCreateNestedManyWithoutPostInput
     notifications?: NotificationCreateNestedManyWithoutPostInput
+    hashtags?: HashtagCreateNestedManyWithoutPostsInput
   }
 
   export type PostUncheckedCreateWithoutCommentsInput = {
@@ -11127,6 +12599,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutPostInput
+    hashtags?: HashtagUncheckedCreateNestedManyWithoutPostsInput
   }
 
   export type PostCreateOrConnectWithoutCommentsInput = {
@@ -11235,6 +12708,7 @@ export namespace Prisma {
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     notifications?: NotificationUpdateManyWithoutPostNestedInput
+    hashtags?: HashtagUpdateManyWithoutPostsNestedInput
   }
 
   export type PostUncheckedUpdateWithoutCommentsInput = {
@@ -11246,6 +12720,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutPostNestedInput
+    hashtags?: HashtagUncheckedUpdateManyWithoutPostsNestedInput
   }
 
   export type NotificationUpsertWithWhereUniqueWithoutCommentInput = {
@@ -11318,6 +12793,7 @@ export namespace Prisma {
     author: UserCreateNestedOneWithoutPostsInput
     comments?: CommentCreateNestedManyWithoutPostInput
     notifications?: NotificationCreateNestedManyWithoutPostInput
+    hashtags?: HashtagCreateNestedManyWithoutPostsInput
   }
 
   export type PostUncheckedCreateWithoutLikesInput = {
@@ -11329,6 +12805,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutPostInput
+    hashtags?: HashtagUncheckedCreateNestedManyWithoutPostsInput
   }
 
   export type PostCreateOrConnectWithoutLikesInput = {
@@ -11407,6 +12884,7 @@ export namespace Prisma {
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
     notifications?: NotificationUpdateManyWithoutPostNestedInput
+    hashtags?: HashtagUpdateManyWithoutPostsNestedInput
   }
 
   export type PostUncheckedUpdateWithoutLikesInput = {
@@ -11418,6 +12896,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutPostNestedInput
+    hashtags?: HashtagUncheckedUpdateManyWithoutPostsNestedInput
   }
 
   export type UserCreateWithoutFollowingInput = {
@@ -11711,6 +13190,7 @@ export namespace Prisma {
     author: UserCreateNestedOneWithoutPostsInput
     comments?: CommentCreateNestedManyWithoutPostInput
     likes?: LikeCreateNestedManyWithoutPostInput
+    hashtags?: HashtagCreateNestedManyWithoutPostsInput
   }
 
   export type PostUncheckedCreateWithoutNotificationsInput = {
@@ -11722,6 +13202,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     comments?: CommentUncheckedCreateNestedManyWithoutPostInput
     likes?: LikeUncheckedCreateNestedManyWithoutPostInput
+    hashtags?: HashtagUncheckedCreateNestedManyWithoutPostsInput
   }
 
   export type PostCreateOrConnectWithoutNotificationsInput = {
@@ -11872,6 +13353,7 @@ export namespace Prisma {
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     comments?: CommentUpdateManyWithoutPostNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
+    hashtags?: HashtagUpdateManyWithoutPostsNestedInput
   }
 
   export type PostUncheckedUpdateWithoutNotificationsInput = {
@@ -11883,6 +13365,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
+    hashtags?: HashtagUncheckedUpdateManyWithoutPostsNestedInput
   }
 
   export type CommentUpsertWithoutNotificationsInput = {
@@ -11972,6 +13455,7 @@ export namespace Prisma {
     comments?: CommentUpdateManyWithoutPostNestedInput
     likes?: LikeUpdateManyWithoutPostNestedInput
     notifications?: NotificationUpdateManyWithoutPostNestedInput
+    hashtags?: HashtagUpdateManyWithoutPostsNestedInput
   }
 
   export type PostUncheckedUpdateWithoutAuthorInput = {
@@ -11983,6 +13467,7 @@ export namespace Prisma {
     comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
     likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutPostNestedInput
+    hashtags?: HashtagUncheckedUpdateManyWithoutPostsNestedInput
   }
 
   export type PostUncheckedUpdateManyWithoutAuthorInput = {
@@ -12216,6 +13701,54 @@ export namespace Prisma {
     read?: BoolFieldUpdateOperationsInput | boolean
     commentId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type HashtagUpdateWithoutPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HashtagUncheckedUpdateWithoutPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type HashtagUncheckedUpdateManyWithoutPostsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PostUpdateWithoutHashtagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    comments?: CommentUpdateManyWithoutPostNestedInput
+    likes?: LikeUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutHashtagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    comments?: CommentUncheckedUpdateManyWithoutPostNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutPostNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutPostNestedInput
+  }
+
+  export type PostUncheckedUpdateManyWithoutHashtagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationCreateManyCommentInput = {

@@ -50,8 +50,13 @@ model Post{
   comments Comment[]
   likes Like[]
   notifications Notification[]
+   hashtags      Hashtag[]
 }
-
+model Hashtag {
+  id    String @id @default(cuid())
+  name  String @unique  
+   posts Post[]
+}
 
 model Comment{
   id String @id @default(cuid())
@@ -73,8 +78,7 @@ model Like {
   userId    String                 
   createdAt DateTime @default(now())
 
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@index([userId,postId])  

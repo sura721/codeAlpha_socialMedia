@@ -45,6 +45,13 @@ model Post {
   comments      Comment[]
   likes         Like[]
   notifications Notification[]
+  hashtags      Hashtag[]
+}
+
+model Hashtag {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts Post[]
 }
 
 model Comment {

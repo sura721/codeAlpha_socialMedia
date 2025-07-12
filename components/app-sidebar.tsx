@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 
  import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import { Button } from "./ui/button"
+import Image from "next/image"
 
 const navigationItems = [
   { icon: Home, label: "Home", href: "/" },
@@ -28,14 +29,22 @@ export function AppSidebar() {
         <div className="flex flex-col h-full p-8">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-12">
-            <div className="relative">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500">
-                <Hash className="h-6 w-6 text-white" />
-              </div>
-              <div className="absolute -top-1 -right-1">
-                <Sparkles className="h-4 w-4 text-yellow-400" />
-              </div>
-            </div>
+          
+
+          <div className="relative">
+  <div className="relative h-12 w-12 rounded-2xl bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 overflow-hidden" >
+    <Image
+      src="/logo.png" 
+      alt="PingNet Logo"
+      fill
+      className="object-contain p-0"  
+    />
+  </div>
+  <div className="absolute -top-1 -right-1">
+    <Sparkles className="h-4 w-4 text-yellow-400" />
+  </div>
+</div>
+
             <div>
               <span className="text-2xl font-bold text-gradient">pingNet</span>
               <p className="text-xs text-muted-foreground font-medium">Connect & Share</p>

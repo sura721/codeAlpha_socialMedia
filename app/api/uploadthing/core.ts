@@ -21,7 +21,7 @@ export const ourFileRouter = {
 
         const updateClerkPromise = (async () => {
           const response = await fetch(imageUrl);
-          const imageBlob = await  response.blob();
+          const imageBlob = await response.blob();
           const clerk = await clerkClient();
           await clerk.users.updateUserProfileImage(metadata.userId, {
             file: imageBlob,
@@ -43,9 +43,17 @@ export const ourFileRouter = {
 
         return { uploadedBy: metadata.userId };
       } catch (error) {
-         throw new UploadThingError("Failed to sync profile picture.");
+        console.error("Error in onUploadComplete:", error);
+        throw new UploadThingError("Failed to sync profile picture.");
       }
     }),
+
+  postImage: f({ image: { maxFileSize: "8MB", maxFileCount: 1 } })
+    .middleware(() => handleAuth())
+    .onUploadComplete(async ({ metadata, file }) => {
+      return { uploadedBy: metadata.userId };
+    }),
+
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
