@@ -1,9 +1,9 @@
 import { serve } from "inngest/next";
-import { inngest,helloWorld } from "@/lib/inngest";
-
+import { deleteUserOnClerkDelete, inngest, syncUserOnCreate } from "@/config/inngest";
 export const { GET, POST, PUT } = serve({
   client: inngest,
   functions: [
-    helloWorld, 
+    syncUserOnCreate,
+    deleteUserOnClerkDelete 
   ],
 });

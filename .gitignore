@@ -25,3 +25,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.tsgit push -u origin main
+
+/lib/generated/prisma
