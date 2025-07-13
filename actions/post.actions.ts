@@ -62,6 +62,12 @@ export async function toggleLike(postId: string) {
   const user = await prisma.user.findUnique({ where: { clerkId } });
   if (!user) throw new Error("User not found");
 
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { authorId: true }
+  });
+  if (!post) throw new Error("Post not found");
+
   const existingLike = await prisma.like.findUnique({
     where: {
       userId_postId: {
@@ -77,10 +83,22 @@ export async function toggleLike(postId: string) {
     });
   } else {
     await prisma.like.create({ data: { userId: user.id, postId: postId } });
+
+    if (post.authorId !== user.id) {
+      await prisma.notification.create({
+        data: {
+          type: 'LIKE',
+          userId: post.authorId,
+          creatorId: user.id,
+          postId: postId,
+        }
+      });
+    }
   }
 
   revalidatePath("/");
   revalidatePath(`/post/${postId}`);
+  revalidatePath('/notifications');
 }
 
 export async function createComment(postId: string, content: string) {
@@ -91,8 +109,14 @@ export async function createComment(postId: string, content: string) {
 
   const user = await prisma.user.findUnique({ where: { clerkId } });
   if (!user) throw new Error("User not found");
+  
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { authorId: true }
+  });
+  if (!post) throw new Error("Post not found");
 
-  await prisma.comment.create({
+  const newComment = await prisma.comment.create({
     data: {
       authorId: user.id,
       postId: postId,
@@ -100,6 +124,19 @@ export async function createComment(postId: string, content: string) {
     },
   });
 
+  if (post.authorId !== user.id) {
+    await prisma.notification.create({
+      data: {
+        type: 'COMMENT',
+        userId: post.authorId,
+        creatorId: user.id,
+        postId: postId,
+        commentId: newComment.id,
+      }
+    });
+  }
+
   revalidatePath(`/`);
   revalidatePath(`/post/${postId}`);
+  revalidatePath('/notifications');
 }

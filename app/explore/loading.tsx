@@ -1,3 +1,83 @@
-export default function Loading() {
-  return null
+import { Card, CardContent } from "@/components/ui/card";
+import { Search } from "lucide-react";
+
+// Helper component for a single skeleton card
+function SkeletonCard() {
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <div className="flex items-center gap-4">
+          <div className="h-12 w-12 rounded-full bg-muted animate-pulse" />
+          <div className="flex-1 space-y-2">
+            <div className="h-4 w-3/4 rounded bg-muted animate-pulse" />
+            <div className="h-3 w-1/2 rounded bg-muted animate-pulse" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// Helper component for a single skeleton tag
+function SkeletonTag() {
+    return (
+        <Card>
+            <CardContent className="p-6">
+                <div className="w-12 h-12 rounded-xl bg-muted animate-pulse mb-4"></div>
+                <div className="h-5 w-3/4 rounded bg-muted animate-pulse mb-2"></div>
+                <div className="h-3 w-1/2 rounded bg-muted animate-pulse"></div>
+            </CardContent>
+        </Card>
+    );
+}
+
+
+export default function ExploreLoading() {
+  return (
+    <>
+      {/* AppSidebar should be outside loading so it's instant */}
+      {/* <AppSidebar /> */}
+
+      {/* Desktop Layout Skeleton */}
+      <div className="hidden lg:block min-h-screen bg-background lg:pl-72">
+        <div className="max-w-4xl mx-auto p-8">
+          <div className="flex items-center justify-between mb-8">
+            <div className="h-9 w-48 rounded-md bg-muted animate-pulse" />
+            <div className="h-9 w-9 rounded-md bg-muted animate-pulse" />
+          </div>
+
+          <div className="mb-8">
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <div className="h-12 w-full rounded-full bg-muted animate-pulse pl-10" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <div className="h-7 w-40 rounded-md bg-muted animate-pulse mb-6" />
+              <div className="grid grid-cols-2 gap-4">
+                <SkeletonTag />
+                <SkeletonTag />
+                <SkeletonTag />
+                <SkeletonTag />
+              </div>
+            </div>
+
+            <div>
+              <div className="h-7 w-48 rounded-md bg-muted animate-pulse mb-6" />
+              <div className="space-y-4">
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+       <div className="lg:hidden">
+       </div>
+    </>
+  );
 }
