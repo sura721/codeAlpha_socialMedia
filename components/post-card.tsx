@@ -14,6 +14,9 @@ import { Heart, MessageCircle, Share, MoreHorizontal, Check } from "lucide-react
 import { deletePost, toggleLike } from "@/actions/post.actions";
 import { cn } from "@/lib/utils";
 import { renderPostContent } from "@/utils/utils";
+import { UserHoverCard } from "./UserHoverCard";
+import { FollowButton } from "./FollowButton";
+
 type PostCardProps = {
   post: {
     id: string;
@@ -23,6 +26,7 @@ type PostCardProps = {
     author: User;
     isOwn: boolean;
     isLiked: boolean;
+    isFollowingAuthor: boolean;
     _count: {
       likes: number;
       comments: number;
@@ -41,7 +45,15 @@ export function PostCard({ post }: PostCardProps) {
   };
 
   const handleDelete = () => {
-    startTransition(() => deletePost(post.id));
+    startTransition(() => {
+      deletePost(post.id)
+        .then(() => {
+          toast.success("Post deleted.");  
+        })
+        .catch((err) => {
+          toast.error("Failed to delete post.");  
+        });
+    });
   };
 
   const handleShare = async () => {
@@ -55,13 +67,22 @@ export function PostCard({ post }: PostCardProps) {
     <Card className="mb-6 lg:mb-8 hover-lift bg-card/50 backdrop-blur-sm border-border/50 overflow-hidden">
       <CardContent className="p-6 lg:p-8">
         <div className="flex items-start gap-4 lg:gap-6 mb-4 lg:mb-6">
-          <Avatar className="h-12 w-12 lg:h-14 lg:w-14">
-            <AvatarImage src={post.author.avatar || undefined} />
-            <AvatarFallback>{post.author.name?.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
-          </Avatar>
+          <UserHoverCard user={post.author} isFollowing={post.isFollowingAuthor} isOwn={post.isOwn}>
+            <Link href={`/profile/${post.author.username}`}>
+              <Avatar className="h-12 w-12 lg:h-14 lg:w-14">
+                <AvatarImage src={post.author.avatar || undefined} />
+                <AvatarFallback>{post.author.name?.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
+              </Avatar>
+            </Link>
+          </UserHoverCard>
+
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-2 lg:mb-3">
-              <span className="font-bold text-base lg:text-lg truncate">{post.author.name}</span>
+              <UserHoverCard user={post.author} isFollowing={post.isFollowingAuthor} isOwn={post.isOwn}>
+                 <Link href={`/profile/${post.author.username}`} className="font-bold text-base lg:text-lg truncate hover:underline">
+                    {post.author.name}
+                 </Link>
+              </UserHoverCard>
               <span className="text-muted-foreground text-sm lg:text-base">@{post.author.username}</span>
               <span className="text-muted-foreground text-sm lg:text-base">·</span>
               <span className="text-muted-foreground text-sm lg:text-base">{new Date(post.createdAt).toLocaleDateString()}</span>
@@ -78,20 +99,25 @@ export function PostCard({ post }: PostCardProps) {
               )}
             </div>
           </div>
-          {post.isOwn && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-muted/50">
-                  <MoreHorizontal className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleDelete} className="text-destructive" disabled={isPending}>
-                  Delete Post
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          
+          <div className="ml-auto flex-shrink-0">
+            {post.isOwn ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-muted/50">
+                    <MoreHorizontal className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={handleDelete} className="text-destructive" disabled={isPending}>
+                    Delete Post
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              isSignedIn && <FollowButton userIdToFollow={post.author.id} isFollowing={post.isFollowingAuthor} />
+            )}
+          </div>
         </div>
         <div className="flex items-center justify-between pt-4 lg:pt-6 border-t border-border/30">
           <Button

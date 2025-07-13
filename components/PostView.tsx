@@ -11,6 +11,7 @@ import { Heart, MessageCircle, Share, Send, Check } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { createComment, toggleLike } from "@/actions/post.actions";
+import { renderPostContent } from "@/utils/utils";
 
 interface PostViewProps {
   post: {
@@ -104,7 +105,10 @@ export function PostView({ post }: PostViewProps) {
           </div>
         </div>
 
-        <p className="text-base leading-relaxed mb-6 whitespace-pre-wrap">{post.content}</p>
+        <div
+                       className="prose dark:prose-invert prose-sm sm:prose-base max-w-none"
+                       dangerouslySetInnerHTML={renderPostContent(post.content)}
+                     />
         
         {post.image && <img src={post.image} alt="Post image" className="rounded-lg border mb-6 w-full" />}
 

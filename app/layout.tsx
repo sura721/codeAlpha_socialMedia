@@ -5,6 +5,8 @@ import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AppSidebar } from "@/components/app-sidebar";
+import { MobileHeader } from "@/components/MobileHeader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -44,9 +46,19 @@ export default function RootLayout({
               speed={200}
               shadow="0 0 10px #a855f7,0 0 5px #a855f7"
             />
-            <div className="flex justify-center items-center min-h-screen">
-              {children}
+            
+            <div className="flex">
+              <AppSidebar />
+              <div className="flex-1 lg:ml-72">
+                <MobileHeader />
+                 <div className="flex justify-center items-center min-h-screen">
+                  <div className="w-full">
+                    {children}
+                  </div>
+                </div>
+              </div>
             </div>
+
           </ThemeProvider>
           <Toaster />
         </body>
