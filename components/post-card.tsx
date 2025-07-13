@@ -38,20 +38,46 @@ export function PostCard({ post }: PostCardProps) {
   const { isSignedIn } = useUser();
   const [isPending, startTransition] = useTransition();
   const [linkCopied, setLinkCopied] = useState(false);
+ 
+  const [optimisticState, setOptimisticState] = useState({
+    isLiked: post.isLiked,
+    likeCount: post._count.likes,
+  });
 
-  const handleLike = () => {
-    if (!isSignedIn) return toast.error("You must be signed in to like a post.");
-    startTransition(() => toggleLike(post.id));
+  const handleLike = async () => {
+    if (!isSignedIn) {
+      toast.error("You must be signed in to like a post.");
+      return;
+    }
+
+  
+    setOptimisticState((currentState) => ({
+      isLiked: !currentState.isLiked,
+      likeCount: currentState.isLiked
+        ? currentState.likeCount - 1
+        : currentState.likeCount + 1,
+    }));
+
+     startTransition(() => {
+      toggleLike(post.id).catch(() => {
+       
+        toast.error("Failed to update like. Please try again.");
+        setOptimisticState({
+          isLiked: post.isLiked,
+          likeCount: post._count.likes,
+        });
+      });
+    });
   };
 
   const handleDelete = () => {
     startTransition(() => {
       deletePost(post.id)
         .then(() => {
-          toast.success("Post deleted.");  
+          toast.success("Post deleted.");
         })
         .catch((err) => {
-          toast.error("Failed to delete post.");  
+          toast.error("Failed to delete post.");
         });
     });
   };
@@ -125,10 +151,11 @@ export function PostCard({ post }: PostCardProps) {
             size="sm"
             onClick={handleLike}
             disabled={isPending}
-            className={cn("text-muted-foreground flex-1", post.isLiked && "text-red-500")}
+             className={cn("text-muted-foreground flex-1", optimisticState.isLiked && "text-red-500")}
           >
-            <Heart className={cn("h-5 w-5 mr-3", post.isLiked && "fill-current")} />
-            <span className="text-sm lg:text-base font-semibold">{post._count.likes}</span>
+            <Heart className={cn("h-5 w-5 mr-3", optimisticState.isLiked && "fill-current")} />
+            {/* 6. --- USE THE OPTIMISTIC COUNT FOR DISPLAY --- */}
+            <span className="text-sm lg:text-base font-semibold">{optimisticState.likeCount}</span>
           </Button>
           <Link href={`/post/${post.id}`} className="flex-1">
             <Button variant="ghost" size="sm" className="text-muted-foreground w-full">

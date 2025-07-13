@@ -45,7 +45,7 @@ model Post{
   image String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-
+  isHighlight Boolean @default(false)
    author User @relation(fields: [authorId],references: [id], onDelete: Cascade)  
   comments Comment[]
   likes Like[]
