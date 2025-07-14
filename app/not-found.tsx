@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Home, Search, ArrowLeft, Sparkles, Hash } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
@@ -13,11 +14,11 @@ export default function NotFound() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-purple-950/20 dark:via-pink-950/20 dark:to-orange-950/20 flex items-center justify-center p-4">
       <Card className="w-full max-w-2xl glass-morphism border-border/50 overflow-hidden">
         <CardContent className="p-12 text-center">
-          {/* Logo */}
+         
           <div className="flex items-center justify-center gap-3 mb-8">
             <div className="relative">
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 shadow-glow">
-                <Hash className="h-8 w-8 text-white" />
+                <Image src={'/logo.png'} alt=""/>
               </div>
               <div className="absolute -top-2 -right-2">
                 <Sparkles className="h-6 w-6 text-yellow-400 animate-pulse" />

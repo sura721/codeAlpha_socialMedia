@@ -10,6 +10,7 @@ import { BottomNavigation } from "@/components/bottom-navigation";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Search } from "lucide-react";
 import { NotificationType } from '@/lib/generated';
+import { renderPostContent } from "@/utils/utils";
 
 type Notification = {
   id: string;
@@ -75,15 +76,19 @@ function NotificationItem({ notification }: { notification: FormattedNotificatio
               )}
 
               {notification.type === 'LIKE' && notification.post?.content && (
-                <p className="text-sm text-muted-foreground mt-2">
-                  {truncateText(notification.post.content, 90)}
-                </p>
+                <div
+                                        className="prose dark:prose-invert prose-sm sm:prose-base max-w-none"
+                                        dangerouslySetInnerHTML={renderPostContent(truncateText(notification.post.content, 90))}
+                                    />
+              
               )}
             </div>
           </div>
         </CardContent>
       </Card>
     </Link>
+
+    
   );
 }
 

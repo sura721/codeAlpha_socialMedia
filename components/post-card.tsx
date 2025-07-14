@@ -49,7 +49,6 @@ export function PostCard({ post }: PostCardProps) {
       toast.error("You must be signed in to like a post.");
       return;
     }
-
   
     setOptimisticState((currentState) => ({
       isLiked: !currentState.isLiked,
@@ -60,7 +59,6 @@ export function PostCard({ post }: PostCardProps) {
 
      startTransition(() => {
       toggleLike(post.id).catch(() => {
-       
         toast.error("Failed to update like. Please try again.");
         setOptimisticState({
           isLiked: post.isLiked,
@@ -90,83 +88,87 @@ export function PostCard({ post }: PostCardProps) {
   };
 
   return (
-    <Card className="mb-6 lg:mb-8 hover-lift bg-card/50 backdrop-blur-sm border-border/50 overflow-hidden">
-      <CardContent className="p-6 lg:p-8">
-        <div className="flex items-start gap-4 lg:gap-6 mb-4 lg:mb-6">
+    <Card className="border-x-0 border-t-0 rounded-none first:border-t mb-0 bg-transparent shadow-none hover-lift-none">
+      <CardContent className="p-4 lg:p-6">
+        <div className="flex items-start gap-3 lg:gap-4">
           <UserHoverCard user={post.author} isFollowing={post.isFollowingAuthor} isOwn={post.isOwn}>
             <Link href={`/profile/${post.author.username}`}>
-              <Avatar className="h-12 w-12 lg:h-14 lg:w-14">
+              <Avatar className="h-10 w-10 lg:h-12 lg:w-12">
                 <AvatarImage src={post.author.avatar || undefined} />
                 <AvatarFallback>{post.author.name?.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
               </Avatar>
             </Link>
           </UserHoverCard>
 
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-2 lg:mb-3">
-              <UserHoverCard user={post.author} isFollowing={post.isFollowingAuthor} isOwn={post.isOwn}>
-                 <Link href={`/profile/${post.author.username}`} className="font-bold text-base lg:text-lg truncate hover:underline">
-                    {post.author.name}
-                 </Link>
-              </UserHoverCard>
-              <span className="text-muted-foreground text-sm lg:text-base">@{post.author.username}</span>
-              <span className="text-muted-foreground text-sm lg:text-base">·</span>
-              <span className="text-muted-foreground text-sm lg:text-base">{new Date(post.createdAt).toLocaleDateString()}</span>
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-sm flex-wrap">
+                    <UserHoverCard user={post.author} isFollowing={post.isFollowingAuthor} isOwn={post.isOwn}>
+                        <Link href={`/profile/${post.author.username}`} className="font-bold hover:underline">
+                            {post.author.name}
+                        </Link>
+                    </UserHoverCard>
+                    <span className="text-muted-foreground">@{post.author.username}</span>
+                    <span className="text-muted-foreground">·</span>
+                    <span className="text-muted-foreground">{new Date(post.createdAt).toLocaleDateString()}</span>
+                </div>
+                
+                <div className="ml-auto">
+                    {post.isOwn ? (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={handleDelete} className="text-destructive" disabled={isPending}>
+                            Delete Post
+                        </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    ) : (
+                      // THE FOLLOW BUTTON IS NOW RESTORED
+                      isSignedIn && <FollowButton userIdToFollow={post.author.id} isFollowing={post.isFollowingAuthor} />
+                    )}
+                </div>
             </div>
-            <div className="space-y-4">
+            
+            <div className="mt-2 space-y-3">
               <div
-                className="prose dark:prose-invert prose-sm sm:prose-base max-w-none"
+                className="prose dark:prose-invert prose-sm max-w-none break-words"
                 dangerouslySetInnerHTML={renderPostContent(post.content)}
               />
               {post.image && (
-                 <div className="rounded-lg border overflow-hidden">
-                    <img src={post.image} alt="Post image" className="w-full object-cover"/>
+                 <div className="rounded-xl border overflow-hidden aspect-video">
+                    <img src={post.image} alt="Post image" className="w-full h-full object-cover"/>
                  </div>
               )}
             </div>
+            
+            <div className="flex items-center justify-between mt-4 -ml-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleLike}
+                disabled={isPending}
+                className={cn("text-muted-foreground rounded-full", optimisticState.isLiked && "text-red-500")}
+              >
+                <Heart className={cn("h-5 w-5 mr-2", optimisticState.isLiked && "fill-current")} />
+                <span className="text-sm font-semibold">{optimisticState.likeCount}</span>
+              </Button>
+              <Link href={`/post/${post.id}`}>
+                <Button variant="ghost" size="sm" className="text-muted-foreground rounded-full">
+                  <MessageCircle className="h-5 w-5 mr-2" />
+                  <span className="text-sm font-semibold">{post._count.comments}</span>
+                </Button>
+              </Link>
+              <Button variant="ghost" size="sm" onClick={handleShare} className="text-muted-foreground rounded-full">
+                {linkCopied ? <Check className="h-5 w-5 mr-2 text-green-500" /> : <Share className="h-5 w-5 mr-2" />}
+                <span className="text-sm font-semibold">{linkCopied ? "Copied" : "Share"}</span>
+              </Button>
+            </div>
           </div>
-          
-          <div className="ml-auto flex-shrink-0">
-            {post.isOwn ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-10 w-10 rounded-full hover:bg-muted/50">
-                    <MoreHorizontal className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={handleDelete} className="text-destructive" disabled={isPending}>
-                    Delete Post
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              isSignedIn && <FollowButton userIdToFollow={post.author.id} isFollowing={post.isFollowingAuthor} />
-            )}
-          </div>
-        </div>
-        <div className="flex items-center justify-between pt-4 lg:pt-6 border-t border-border/30">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleLike}
-            disabled={isPending}
-             className={cn("text-muted-foreground flex-1", optimisticState.isLiked && "text-red-500")}
-          >
-            <Heart className={cn("h-5 w-5 mr-3", optimisticState.isLiked && "fill-current")} />
-            {/* 6. --- USE THE OPTIMISTIC COUNT FOR DISPLAY --- */}
-            <span className="text-sm lg:text-base font-semibold">{optimisticState.likeCount}</span>
-          </Button>
-          <Link href={`/post/${post.id}`} className="flex-1">
-            <Button variant="ghost" size="sm" className="text-muted-foreground w-full">
-              <MessageCircle className="h-5 w-5 mr-3" />
-              <span className="text-sm lg:text-base font-semibold">{post._count.comments}</span>
-            </Button>
-          </Link>
-          <Button variant="ghost" size="sm" onClick={handleShare} className="text-muted-foreground flex-1">
-            {linkCopied ? <Check className="h-5 w-5 mr-3 text-green-500" /> : <Share className="h-5 w-5 mr-3" />}
-            <span className="text-sm lg:text-base font-semibold">{linkCopied ? "Copied!" : "Share"}</span>
-          </Button>
         </div>
       </CardContent>
     </Card>

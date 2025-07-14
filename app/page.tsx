@@ -101,7 +101,7 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
-      <div >
+      <div className="lg:hidden">
         <BottomNavigation />
       </div>
     </>

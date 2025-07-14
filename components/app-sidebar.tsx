@@ -22,8 +22,7 @@ export function AppSidebar() {
 
   return (
     <>
-      {/* --- Desktop Sidebar (Unchanged) --- */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-72 lg:bg-card/80 lg:backdrop-blur-xl lg:border-r lg:border-border/50">
+       <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-72 lg:bg-card/80 lg:backdrop-blur-xl lg:border-r lg:border-border/50">
         <div className="flex flex-col h-full p-8">
           <div className="flex items-center gap-3 mb-12">
             <div className="relative">

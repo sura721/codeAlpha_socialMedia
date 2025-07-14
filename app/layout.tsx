@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from '@clerk/nextjs';
 import NextTopLoader from 'nextjs-toploader';
@@ -13,8 +13,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "PingNet",
   description: "Connect & Share",
-  viewport: "width=device-width, initial-scale=1.0",
-
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -25,6 +23,11 @@ export const metadata: Metadata = {
       { url: '/apple-touch-icon.png', type: 'image/png', sizes: '180x180' },
     ],
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1.0,
 };
 
 export default function RootLayout({
@@ -49,16 +52,12 @@ export default function RootLayout({
               shadow="0 0 10px #a855f7,0 0 5px #a855f7"
             />
             
-            <div className="flex">
+            <div>
               <AppSidebar />
-              <div className="flex-1 lg:ml-72">
+              <main className="lg:pl-72">
                 <MobileHeader />
-                 <div className="flex justify-center items-center min-h-screen">
-                  <div className="w-full">
-                    {children}
-                  </div>
-                </div>
-              </div>
+                {children}
+              </main>
             </div>
 
           </ThemeProvider>
