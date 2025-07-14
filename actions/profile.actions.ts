@@ -1,5 +1,4 @@
-// file: lib/actions.ts
-
+ 
 "use server";
 
 import prisma from "@/lib/prisma";
@@ -10,12 +9,10 @@ import { z } from "zod";
 const UpdateUserSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters.").max(50),
 
-  // This schema allows a valid string OR an empty string, then transforms the empty one to null.
-  bio: z.string().max(160).optional().transform(val => val === '' ? null : val),
+   bio: z.string().max(160).optional().transform(val => val === '' ? null : val),
   location: z.string().max(30).optional().transform(val => val === '' ? null : val),
   
-  // This schema allows a valid URL OR an empty string, then transforms the empty one to null.
-  website: z.string()
+   website: z.string()
     .url("Please provide a valid URL if the field is not empty.")
     .or(z.literal(''))
     .optional()

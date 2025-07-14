@@ -3,7 +3,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
-
+import { revalidateTag } from "next/cache";  
 export async function createPost(content: string, imageUrl?: string) {
   const { userId: clerkId } =await auth();
   if (!clerkId) throw new Error("User not authenticated");
@@ -35,8 +35,8 @@ export async function createPost(content: string, imageUrl?: string) {
     },
   });
 
-  revalidatePath("/");
-  revalidatePath("/explore");
+ revalidateTag('posts');  
+  revalidateTag('explore-tags');
 }
 
 export async function deletePost(postId: string) {
@@ -50,9 +50,8 @@ export async function deletePost(postId: string) {
   if (!user || post.authorId !== user.id) throw new Error("Unauthorized");
 
   await prisma.post.delete({ where: { id: postId } });
-
-  revalidatePath("/");
-  revalidatePath("/explore");
+ revalidateTag('posts');
+  revalidateTag('explore-tags');
 }
 
 export async function toggleLike(postId: string) {
@@ -97,8 +96,9 @@ export async function toggleLike(postId: string) {
   }
 
   revalidatePath("/");
-  revalidatePath(`/post/${postId}`);
-  revalidatePath('/notifications');
+  
+  revalidateTag('posts');
+  revalidateTag(`post:${postId}`);
 }
 
 export async function createComment(postId: string, content: string) {
@@ -136,7 +136,6 @@ export async function createComment(postId: string, content: string) {
     });
   }
 
-  revalidatePath(`/`);
-  revalidatePath(`/post/${postId}`);
-  revalidatePath('/notifications');
+    revalidateTag('posts');
+    revalidateTag(`post:${postId}`);
 }

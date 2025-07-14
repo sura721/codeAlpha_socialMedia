@@ -1,4 +1,3 @@
- 
 'use client';
 
 import { useState, useTransition } from "react";
@@ -6,11 +5,13 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Search, Settings, Code, Plane, UtensilsCrossed, Palette, Music, Dumbbell, LucideIcon } from "lucide-react";
+import { Search, Code, Plane, UtensilsCrossed, Palette, Music, Dumbbell, LucideIcon } from "lucide-react";
 import { BottomNavigation } from "@/components/bottom-navigation";
 import { AppSidebar } from "@/components/app-sidebar";
 import { FollowButton } from "@/components/FollowButton";
 import { searchAction } from "@/actions/explore.actions";
+import { SearchResultSkeleton } from '../../components/SearchResultSkeleton';
+import { NoResultsFound } from "@/components/NoResultsFound";
 
 type SuggestedUser = { id: string; name: string | null; username: string; bio: string | null; avatar: string | null; };
 type TrendingTag = { id: string; name: string; _count: { posts: number }; };
@@ -34,7 +35,7 @@ export function ExploreClientPage({ initialTags, initialUsers }: { initialTags: 
   const [searchResults, setSearchResults] = useState<{ users: SearchResultUser[], tags: SearchResultTag[] }>({ users: [], tags: [] });
   const [isSearchPending, startSearchTransition] = useTransition();
 
-  const handleSearch = (value: string) => {
+   const handleSearch = (value: string) => {
     setSearchQuery(value);
     if (value.length > 0) {
       setIsSearching(true);
@@ -60,7 +61,7 @@ export function ExploreClientPage({ initialTags, initialUsers }: { initialTags: 
         <div className="max-w-4xl mx-auto p-8">
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-3xl font-bold">Explore</h1>
-            <button className="p-2" aria-label="Settings"><Settings className="h-5 w-5" /></button>
+           
           </div>
           <div className="mb-8">
             <div className="relative max-w-md">
@@ -76,31 +77,35 @@ export function ExploreClientPage({ initialTags, initialUsers }: { initialTags: 
           {isSearching ? (
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Search Results</h2>
-              {isSearchPending ? <p className="text-muted-foreground">Searching...</p> : allFilteredResults.length > 0 ? (
-                <div className="space-y-3">
-                  {allFilteredResults.map((result) => (
-                    <Link key={`${result.type}-${result.id}`} href={result.type === 'user' ? `/profile/${result.username}` : `/tags/${result.name}`} passHref>
-                      <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
-                        <CardContent className="p-4">
-                          <div className="flex items-center gap-3">
-                            {result.type === "user" ? (
-                              <>
-                                <Avatar className="h-10 w-10"><AvatarImage src={result.avatar || undefined} /><AvatarFallback>{result.name?.split(" ").map((n) => n[0]).join("")}</AvatarFallback></Avatar>
-                                <div><p className="font-medium">{result.name}</p><p className="text-sm text-muted-foreground">@{result.username}</p></div>
-                              </>
-                            ) : (
-                              <>
-                                <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center"><span className="text-primary font-bold">#</span></div>
-                                <div><p className="font-medium">#{result.name}</p><p className="text-sm text-muted-foreground">{result.posts} posts</p></div>
-                              </>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  ))}
-                </div>
-              ) : <p className="text-muted-foreground">No results found for "{searchQuery}"</p>}
+              {isSearchPending ? (
+                   <SearchResultSkeleton />
+                ) : allFilteredResults.length > 0 ? (
+                  <div className="space-y-3">
+                    {allFilteredResults.map((result) => (
+                      <Link key={`${result.type}-${result.id}`} href={result.type === 'user' ? `/profile/${result.username}` : `/tags/${result.name}`} passHref>
+                        <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+                          <CardContent className="p-4">
+                            <div className="flex items-center gap-3">
+                              {result.type === "user" ? (
+                                <>
+                                  <Avatar className="h-10 w-10"><AvatarImage src={result.avatar || undefined} /><AvatarFallback>{result.name?.split(" ").map((n) => n[0]).join("")}</AvatarFallback></Avatar>
+                                  <div><p className="font-medium">{result.name}</p><p className="text-sm text-muted-foreground">@{result.username}</p></div>
+                                </>
+                              ) : (
+                                <>
+                                  <div className="h-10 w-10 bg-primary/10 rounded-full flex items-center justify-center"><span className="text-primary font-bold">#</span></div>
+                                  <div><p className="font-medium">#{result.name}</p><p className="text-sm text-muted-foreground">{result.posts} posts</p></div>
+                                </>
+                              )}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                   <NoResultsFound searchQuery={searchQuery} />
+                )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -150,7 +155,9 @@ export function ExploreClientPage({ initialTags, initialUsers }: { initialTags: 
           {isSearching ? (
              <div className="space-y-4">
               <h2 className="text-lg font-semibold">Search Results</h2>
-               {isSearchPending ? <p className="text-muted-foreground text-sm">Searching...</p> : allFilteredResults.length > 0 ? (
+               {isSearchPending ? (
+                   <SearchResultSkeleton/>
+                ) : allFilteredResults.length > 0 ? (
                  <div className="space-y-3">
                    {allFilteredResults.map((result) => (
                      <Link key={`${result.type}-${result.id}`} href={result.type === 'user' ? `/profile/${result.username}` : `/tags/${result.name}`} passHref>
@@ -174,7 +181,9 @@ export function ExploreClientPage({ initialTags, initialUsers }: { initialTags: 
                      </Link>
                    ))}
                  </div>
-               ) : <p className="text-muted-foreground text-sm">No results found</p>}
+               ) : (
+                   <NoResultsFound searchQuery={searchQuery}/>
+                )}
              </div>
           ) : (
             <>

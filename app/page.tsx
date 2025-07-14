@@ -8,6 +8,7 @@ import prisma from "@/lib/prisma";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
+ 
 
 function SignInPrompt() {
   return (
@@ -25,18 +26,20 @@ function SignInPrompt() {
 }
 
 export default async function HomePage() {
-  const [authResult, postsData] = await Promise.all([
-    auth(),
-    prisma.post.findMany({
-      orderBy: { createdAt: "desc" },
-      include: {
-        author: true,
-        _count: { select: { likes: true, comments: true } },
-      },
-    }),
-  ]);
+  const { userId: clerkId } = await auth();
 
-  const { userId: clerkId } = authResult;
+  const postsData = await prisma.post.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      author: true,
+      _count: {
+        select: { likes: true, comments: true },
+      },
+    },
+   });
+
   let posts;
 
   if (clerkId) {
@@ -48,19 +51,23 @@ export default async function HomePage() {
     if (currentUser) {
       const postIds = postsData.map(p => p.id);
       const authorIds = [...new Set(postsData.map(p => p.authorId))];
-      
-      const [userLikes, userFollows] = await Promise.all([
-        prisma.like.findMany({
-          where: { userId: currentUser.id, postId: { in: postIds } },
-          select: { postId: true },
-        }),
-        prisma.follows.findMany({
-          where: { followerId: currentUser.id, followingId: { in: authorIds } },
-          select: { followingId: true },
-        }),
-      ]);
 
+      const userLikes = await prisma.like.findMany({
+        where: {
+          userId: currentUser.id,
+          postId: { in: postIds },
+        },
+        select: { postId: true },
+      });
       const likedPostIds = new Set(userLikes.map(like => like.postId));
+
+      const userFollows = await prisma.follows.findMany({
+        where: {
+          followerId: currentUser.id,
+          followingId: { in: authorIds },
+        },
+        select: { followingId: true },
+      });
       const followedAuthorIds = new Set(userFollows.map(follow => follow.followingId));
 
       posts = postsData.map(post => ({
@@ -80,15 +87,13 @@ export default async function HomePage() {
     <>
       <AppSidebar />
       <div className="min-h-screen bg-background pb-20 lg:pb-0 lg:pl-72">
-        <div className="max-w-2xl mx-auto">
-          <div className="p-4 lg:p-8">
-            <SignedIn>
-              <CreatePostForm />
-            </SignedIn>
-            <SignedOut>
-              <SignInPrompt />
-            </SignedOut>
-          </div>
+        <div className="max-w-2xl mx-auto p-4 lg:p-8">
+          <SignedIn>
+            <CreatePostForm />
+          </SignedIn>
+          <SignedOut>
+            <SignInPrompt />
+          </SignedOut>
           <div className="space-y-0">
             {posts.map((post) => (
               <PostCard key={post.id} post={post} />
@@ -96,7 +101,7 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
-      <div className="lg:hidden">
+      <div >
         <BottomNavigation />
       </div>
     </>

@@ -13,6 +13,8 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "PingNet",
   description: "Connect & Share",
+  viewport: "width=device-width, initial-scale=1.0",
+
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },

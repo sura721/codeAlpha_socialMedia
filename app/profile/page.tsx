@@ -30,7 +30,7 @@ export default async function ProfilePage() {
     return notFound();
   }
 
-  const [userWithDetails, commentsReceivedCount, recentComments] = await Promise.all([
+   const [userWithDetails, commentsReceivedCount, recentComments] = await Promise.all([
     prisma.user.findUnique({
       where: { id: user.id },
       include: {
@@ -42,7 +42,7 @@ export default async function ProfilePage() {
             authorId: true,
             createdAt: true,
             updatedAt: true,
-            isHighlight: true, // THE FIX IS HERE
+            isHighlight: true,
           },
           orderBy: { createdAt: "desc" },
         },
@@ -56,6 +56,7 @@ export default async function ProfilePage() {
           },
         },
       },
+       
     }),
     prisma.comment.count({
       where: { post: { authorId: user.id } },
