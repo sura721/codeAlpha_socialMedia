@@ -2,7 +2,7 @@
 
 > **A modern, full-stack social media platform to connect, create, and share.**
 
-![pingnet hero](./public/screenshots/hero.png) <!-- Replace with your real screenshot -->
+![pingnet hero](./public/home.png) 
 
 ---
 
@@ -61,7 +61,6 @@
 ✅ Clerk account  
 ✅ UploadThing account
 
-
 ---
 
 ### 1️⃣ Clone the Repository
@@ -69,39 +68,52 @@
 ```bash
 git clone https://github.com/sura721/codeAlpha_socialMedia.git
 cd pingNet
+```
+# -------------------------------------
+# 🌿 DATABASE (PostgreSQL via Neon)
+# -------------------------------------
+DATABASE_URL=""
 
+# -------------------------------------
+# 🔑 Clerk Authentication
+# -------------------------------------
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=""
 
-#env files
-# PostgreSQL
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=require"
+CLERK_SECRET_KEY=""
 
-# Clerk
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="pk_test_..."
-CLERK_SECRET_KEY="sk_test_..."
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=""
 
-NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
-NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL="/"
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL="/"
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=""
 
-# UploadThing
-UPLOADTHING_SECRET="sk_live_..."
-UPLOADTHING_APP_ID="..."
+NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=""
 
-# Inngest (optional for production)
-INNGEST_EVENT_KEY="prod_..."
-INNGEST_SIGNING_KEY="signkey-prod-..."
+# -------------------------------------
+# 📦 UploadThing (File Uploads)
+# -------------------------------------
+UPLOADTHING_SECRET=""
 
+UPLOADTHING_APP_ID=""
 
+UPLOADTHING_MAX_CALLBACK_WAIT_MS=
+
+UPLOADTHING_TOKEN=""
+
+ 
+# -------------------------------------
+# ⚡ Inngest (Background Jobs & Webhooks)
+# -------------------------------------
+INNGEST_EVENT_KEY=""
+
+INNGEST_SIGNING_KEY=""
 
 
 # Set Up the Database
 npx prisma db push
+
 npx prisma generate
 
-
-# 🤝 Acknowledgments
-💡 Built using:
+## 🤝 Acknowledgments
+# 💡 Built using:
 
 Next.js
 
@@ -115,11 +127,7 @@ Tiptap
 
 Vercel
 
-inngest
-
-
+Inngest
 
 <p align="center"> <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" width="250" alt="rocket launch" /> </p>
-
-
 🚀 Made with ❤️ by Surafel Admas
