@@ -18,7 +18,8 @@ export default function NotFound() {
           <div className="flex items-center justify-center gap-3 mb-8">
             <div className="relative">
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 shadow-glow">
-                <Image src={'/logo.png'} alt=""/>
+                <Image src={'/logo.png'} alt=""  fill 
+    className="object-cover rounded-2xl"/>
               </div>
               <div className="absolute -top-2 -right-2">
                 <Sparkles className="h-6 w-6 text-yellow-400 animate-pulse" />
