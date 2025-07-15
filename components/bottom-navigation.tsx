@@ -4,17 +4,20 @@ import { Home, Search, Bell, User, Plus } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { useUser } from "@clerk/nextjs"
+
+
+export function BottomNavigation() {
+  const {user} = useUser()
+  const pathname = usePathname()
 
 const navigationItems = [
   { icon: Home, label: "Home", href: "/" },
   { icon: Search, label: "Explore", href: "/explore" },
   { icon: Plus, label: "Create", href: "/create" },
   { icon: Bell, label: "Notifications", href: "/notifications" },
-  { icon: User, label: "Profile", href: "/profile" },
+  { icon: User, label: "Profile",href: user ? `/profile/${user.username}` : "/not-found" },
 ]
-
-export function BottomNavigation() {
-  const pathname = usePathname()
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border z-50">
