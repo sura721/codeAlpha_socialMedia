@@ -133,18 +133,19 @@ export function PostCard({ post }: PostCardProps) {
                     )}
                 </div>
             </div>
-            
-            <div className="mt-2 space-y-3">
+         <Link href={`/post/${post.id}`}>
+         <div className="mt-2 space-y-3">
               <div
                 className="prose dark:prose-invert prose-sm max-w-none break-words"
                 dangerouslySetInnerHTML={renderPostContent(post.content)}
-              />
+                />
               {post.image && (
-                 <div className="rounded-xl border overflow-hidden aspect-video">
+                <div className="rounded-xl border overflow-hidden aspect-video">
                     <img src={post.image} alt="Post image" className="w-full h-full object-cover"/>
                  </div>
               )}
             </div>
+              </Link>
             
             <div className="flex items-center justify-between mt-4 -ml-2">
               <Button
